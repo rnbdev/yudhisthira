@@ -1,4 +1,4 @@
-defmodule Yudhisthira.Http do
+defmodule Yudhisthira.Plugs.Http do
 	use Plug.Router
 	alias Plug.Conn
 
@@ -7,7 +7,7 @@ defmodule Yudhisthira.Http do
 	plug :match
 	plug :dispatch
 	
-	post "/authenticate" do
+	post Application.get_env(:yudhisthira, :authentication_endpoint) do
 		{:ok, body_data, conn} = Conn.read_body(conn)
 		{:ok, authentication_payload} = decode(body_data)
 		{:ok, data} = encode(authentication_payload)
