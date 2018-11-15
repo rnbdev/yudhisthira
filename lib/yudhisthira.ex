@@ -15,10 +15,8 @@ defmodule Yudhisthira do
   """
   def start(_type, _args) do
     children = [
-      %{
-        id: Yudhisthira.Poller,
-        start: {Yudhisthira.Poller, :start_link, []}
-      }
+      Yudhisthira.Poller,
+      Plug.Cowboy.child_spec(scheme: :http, plug: Yudhisthira.Http, options: [port: 4001])
     ]
     Supervisor.start_link(children, strategy: :one_for_one)
   end
