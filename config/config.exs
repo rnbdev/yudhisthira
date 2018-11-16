@@ -30,3 +30,7 @@ use Mix.Config
 #     import_config "#{Mix.env}.exs"
 
 config :yudhisthira, authentication_endpoint: "/authenticate"
+config :yudhisthira, authentication_interval: 10_000
+config :yudhisthira, http_port: 4001
+config :yudhisthira, udp_active_port: 5879
+config :yudhisthira, udp_passive_port: 5880
