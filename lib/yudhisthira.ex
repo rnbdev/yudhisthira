@@ -26,9 +26,12 @@ defmodule Yudhisthira do
 
   def start(_type, _args) do
     children = [
-      Yudhisthira.AuthenticationPoller,
+      # Agents
       Yudhisthira.AuthenticationAgent,
-      plug_child(Yudhisthira.Plugs.Http)
+      # HTTP Endpoints
+      plug_child(Yudhisthira.Plugs.Http),
+      # Pollers
+      Yudhisthira.AuthenticationPoller
     ]
     Supervisor.start_link(children, strategy: :one_for_one)
   end

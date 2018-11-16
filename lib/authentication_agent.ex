@@ -16,6 +16,12 @@ defmodule Yudhisthira.AuthenticationAgent do
     ] end)
   end
 
+  def node_exists?(node) do
+    Agent.get(__MODULE__, fn state -> 
+      Enum.find(state, fn existing_node -> NetworkNode.is_equal(node, existing_node) end)
+    end)
+  end
+
   def remove_authenticated_node(node) do
     Agent.update(__MODULE__, fn state -> 
       Enum.filter(state, fn existing_node ->

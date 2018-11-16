@@ -10,7 +10,9 @@ defmodule Yudhisthira.AuthenticationPoller do
   end
 
 	defp tick() do
-		Agent.update(__MODULE__, fn _ ->
+		# Poll every node in vicinity from the discovery agent, 
+		# authenticate against them and keep then your inventory
+		Agent.update(__MODULE__, fn ->
 			Task.start(fn -> 
 				:timer.sleep(@sleep_interval)
 				tick()

@@ -10,6 +10,8 @@ defmodule Yudhisthira.Plugs.Http do
 	post Application.get_env(:yudhisthira, :authentication_endpoint) do
 		{:ok, body_data, conn} = Conn.read_body(conn)
 		{:ok, authentication_payload} = decode(body_data)
+		# TODO: Enter Auth logic here
+		# TODO: If authenticated add the node to inventory
 		{:ok, data} = encode(authentication_payload)
 
 		conn |> 
