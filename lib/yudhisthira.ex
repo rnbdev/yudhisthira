@@ -27,6 +27,7 @@ defmodule Yudhisthira do
   def start(_type, _args) do
     children = [
       # Agents
+      Yudhisthira.NodeDiscoveryAgent,
       Yudhisthira.AuthenticationAgent,
       # HTTP Endpoints
       plug_child(Yudhisthira.Plugs.Http),
