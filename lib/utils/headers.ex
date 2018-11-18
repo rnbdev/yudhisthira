@@ -2,7 +2,7 @@ defmodule Yudhisthira.Utils.Headers do
   alias Yudhisthira.Utils.Config
 
   def get_header_from_config(header_name) do
-    "#{Config.config(:header_prefix)}-#{Config.config(header_name)}"
+    String.downcase("#{Config.config(:header_prefix)}-#{Config.config(header_name)}")
   end
 
   def assign_host_headers(headers \\ []) do
@@ -23,11 +23,14 @@ defmodule Yudhisthira.Utils.Headers do
     case Enum.find(headers, fn header_kv ->
       {header, _} = header_kv
       cond do
-        header == String.downcase(get_header_from_config(header_symbol)) -> true
+        header == get_header_from_config(header_symbol) -> true
         true -> nil
       end
     end) do
-      {_, session_id} -> session_id
+      {_, header_value} -> case String.trim(header_value) do
+        "" -> nil
+        _ -> header_value
+      end
       _ -> nil
     end
   end
@@ -52,7 +55,7 @@ defmodule Yudhisthira.Utils.Headers do
 
   def identification_headers_exist?(headers) do
     (headers |> get_header_value(:hostid_header) != nil) and
-    (headers |> get_header_value(:hostport_header) != nil) &&
+    (headers |> get_header_value(:hostport_header) != nil) and
     (headers |> get_header_value(:hostname_header) != nil)
   end
 end
