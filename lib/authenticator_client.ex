@@ -1,17 +1,22 @@
 defmodule Yudhisthira.AuthenticatorClient do
   import Poison, only: [decode: 1, encode: 1]
+  alias Yudhisthira.Utils.Config
 
-  def authenticate(ip, port, payload) do
-    {:ok, body} = encode(payload)
-
-    # TODO: Clean up...
+  def create_url(host, port) do
     http_proto = case System.get_env("SSL_ENABLED") do
       nil -> "http"
       _ -> "https"
     end
 
+    "#{http_proto}://#{host}:#{port}/#{Config.config(:authentication_endpoint)}"
+  end
+
+  def authenticate(host, port, payload) do
+    {:ok, body} = encode(payload)
+
+    # TODO: Clean up...
     response = HTTPotion.post(
-      "#{http_proto}://#{ip}:#{port}/#{Application.get_env(:yudhisthira, :authentication_endpoint)}",
+      create_url(host, port),
       [
         body: body,
         headers: [

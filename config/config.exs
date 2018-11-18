@@ -31,6 +31,10 @@ use Mix.Config
 
 config :yudhisthira, authentication_endpoint: "/authenticate"
 config :yudhisthira, authentication_interval: 10_000
-config :yudhisthira, http_port: 4001
-config :yudhisthira, udp_active_port: 5879
-config :yudhisthira, udp_passive_port: 5880
+config :yudhisthira, default_http_port: 4001
+
+config :yudhisthira, header_prefix: "X-Yudhisthira"
+config :yudhisthira, hostname_header: "Hostname"
+config :yudhisthira, hostport_header: "Host-Port"
+config :yudhisthira, hostid_header: "Id"
+config :yudhisthira, session_header: "Session-Id"

@@ -15,7 +15,7 @@ defmodule Yudhisthira do
   """
   def plug_child(plug) do
     port = case System.get_env("HTTP_PORT") do
-      nil -> Application.get_env(:yudhisthira, :http_port)
+      nil -> Application.get_env(:yudhisthira, :default_http_port)
       n -> (fn port ->
         {port, _} = Integer.parse(port)
         port
@@ -27,12 +27,9 @@ defmodule Yudhisthira do
   def start(_type, _args) do
     children = [
       # Agents
-      Yudhisthira.NodeDiscoveryAgent,
-      Yudhisthira.AuthenticationAgent,
+      # Yudhisthira.AuthenticationAgent,
       # HTTP Endpoints
       plug_child(Yudhisthira.Plugs.Http),
-      # Pollers
-      Yudhisthira.AuthenticationPoller
     ]
     Supervisor.start_link(children, strategy: :one_for_one)
   end

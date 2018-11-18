@@ -1,24 +1,20 @@
 defmodule Yudhisthira.Plugs.Http do
 	use Plug.Router
-	alias Plug.Conn
-
 	import Poison, only: [decode: 1, encode: 1]
+
+	alias Plug.Conn
+	alias Yudhisthira.Utils.Headers
 
 	plug :match
 	plug :dispatch
 	
 	post Application.get_env(:yudhisthira, :authentication_endpoint) do
-		{:ok, body_data, conn} = Conn.read_body(conn)
-		{:ok, authentication_payload} = decode(body_data)
+		headers = conn.req_headers
+		IO.inspect(Headers.get_session_id(headers))
+		
 		# TODO: Enter Auth logic here
 		# TODO: If authenticated add the node to inventory
-		{:ok, data} = encode(authentication_payload)
-
-		conn |> 
-			merge_resp_headers([
-				{"Content-Type", "application/json"}
-			]) |>
-			send_resp(200, data)
+		conn |> send_resp(200, "")
 	end
 
 	# Everything else goes here... really
