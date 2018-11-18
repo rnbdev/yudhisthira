@@ -7,11 +7,11 @@ Yudhisthira is the eptiome of righteousness in the legendary epic Mahabharata. I
 
 ## Use cases
 
-Yudhisthira provides a scalable, decentralized mesh of low footprint, fault tolerant nodes with in-memory-only datastore. The privacy-first communication system is suitable for a wide variety of intra-VPC applications running on multi-vendor platforms.
+Yudhisthira provides a scalable, decentralized mesh of low footprint, fault tolerant nodes with in-memory-only datastore. The privacy-first communication system is suitable for a wide variety of intra-VPC applications running on multi-vendor platforms. It is built on industry standard Erlang runtime for resilience.
 
 Yudhisthira is ideal for enterprise and permissioned networks where trust is a two-way street. It enables a number of multiparty computation (MPC) and zero-knowledge proof (ZKP) based communication templates for providing proof of knowledge without sharing sensitive data.
 
-From financial institutions, audit firms to Internet of Things (IoT) networks, Yudhisthira can be setup in minutes in a variety of domains. A credit scoring institution proving that a particular user is credit worthy without sharing the credit score? Third-party audit firms ensuring the validity of a transaction between two entitites without knowing the transaction details? Two IoT devices proving to each other that they are from the same manufacturer without sharing the manufacturer details? The possibilities are endless.
+From financial institutions, audit firms to Internet of Things (IoT) networks, Yudhisthira can be used out-of-the-box and setup in minutes for a variety of domains. A credit scoring institution proving that a particular user is credit worthy without sharing the credit score? Third-party audit firms ensuring the validity of a transaction between two entitites without knowing the transaction details? Two IoT devices proving to each other that they are from the same manufacturer without sharing the manufacturer details? The possibilities are endless.
 
 ## Why open-source?
 
