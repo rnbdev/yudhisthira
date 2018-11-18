@@ -1,5 +1,6 @@
 defmodule Yudhisthira do
   use Application
+
   @moduledoc """
   Documentation for Yudhisthira.
   """
@@ -26,8 +27,11 @@ defmodule Yudhisthira do
 
   def start(_type, _args) do
     children = [
-      # Agents
-      # Yudhisthira.AuthenticationAgent,
+      # GenServers
+      %{
+        id: Yudhisthira.AuthenticationServer,
+        start: {Yudhisthira.AuthenticationServer, :start_link, []}
+      },
       # HTTP Endpoints
       plug_child(Yudhisthira.Plugs.Http),
     ]
