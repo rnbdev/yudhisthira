@@ -1,19 +1,17 @@
 # Yudhisthira
 Privacy-first communication protocol for decentralized networks providing interoperability in multi-vendor platforms.
 
-Set up a lightweight mesh network of nodes. Establish a messege-based communication system in minutes. Privacy-first design ensures no information leakage. A number of zero-knowledge proof (ZKP) based communication templates are provided for abstraction.
+## Etymology
+
+Yudhisthira is the eptiome of righteousness in the legendary epic Mahabharata. It seems only appropriate to name our protocol by the king who never lied.
 
 ## Use cases
 
-- Audit
-- IoT
+Yudhisthira provides a scalable, decentralized mesh of low footprint, fault tolerant nodes with in-memory-only datastore. The privacy-first communication system is suitable for a wide variety of intra-VPC applications running on multi-vendor platforms.
 
-## (Tentative) Overview and Goal for showcase
+Yudhisthira is ideal for enterprise and permissioned networks where trust is a two-way street. It enables a number of multiparty computation (MPC) and zero-knowledge proof (ZKP) based communication templates for providing proof of knowledge without sharing sensitive data.
 
-- Spawn a number of nodes.
-- Each node have a directory of nodes.
-- Nodes communicate with each other.
-- Each communication is privacy-focused.
+From financial institutions, audit firms to Internet of Things (IoT) networks, Yudhisthira can be setup in minutes in a variety of domains. A credit scoring institution proving that a particular user is credit worthy without sharing the credit score? Third-party audit firms ensuring the validity of a transaction between two entitites without knowing the transaction details? Two IoT devices proving to each other that they are from the same manufacturer without sharing the manufacturer details? The possibilities are endless.
 
 ## Why open-source?
 
