@@ -1,6 +1,5 @@
 defmodule Yudhisthira.Plugs.Http do
 	use Plug.Router
-	# import Poison, only: [decode: 1, encode: 1]
 
 	import Plug.Conn, only: [put_resp_header: 3, send_resp: 3, get_req_header: 2]
 	alias Yudhisthira.Utils.Headers
@@ -13,11 +12,16 @@ defmodule Yudhisthira.Plugs.Http do
 	defp create_node_from_conn(conn) do
 		%NetworkNode{
 			ip_address: conn |> 
-				get_req_header(Headers.get_header_from_config(:hostname_header)),
+				get_req_header(Headers.get_header_from_config(:hostname_header)) |>
+				List.first(),
 			port: conn |>
-				get_req_header(Headers.get_header_from_config(:hostport_header)),
+				get_req_header(Headers.get_header_from_config(:hostport_header)) |>
+				List.first() |>
+				Integer.parse() |>
+				Kernel.elem(0),
 			id: conn |>
-				get_req_header(Headers.get_header_from_config(:hostid_header)),
+				get_req_header(Headers.get_header_from_config(:hostid_header)) |>
+				List.first(),
 		}
 	end
 	

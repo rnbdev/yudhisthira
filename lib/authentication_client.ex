@@ -31,4 +31,8 @@ defmodule Yudhisthira.AuthenticationClient do
       ]
     )
   end
+
+  def authenticate(node) do
+    authenticate(node.ip_address, node.port)
+  end
 end

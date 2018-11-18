@@ -1,19 +1,6 @@
 defmodule Yudhisthira do
   use Application
 
-  @moduledoc """
-  Documentation for Yudhisthira.
-  """
-
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> Yudhisthira.hello
-      :world
-
-  """
   def plug_child(plug) do
     port = case System.get_env("HTTP_PORT") do
       nil -> Application.get_env(:yudhisthira, :default_http_port)
