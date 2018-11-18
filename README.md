@@ -1,5 +1,5 @@
 # Yudhisthira
-Privacy-first lightweight communication protocol for decentralized permissioned networks providing interoperability in multi-vendor platforms.
+Privacy-first communication protocol for decentralized networks providing interoperability in multi-vendor platforms.
 
 Set up a lightweight mesh network of nodes. Establish a messege-based communication system in minutes. Privacy-first design ensures no information leakage. A number of zero-knowledge proof (ZKP) based communication templates are provided for abstraction.
 
