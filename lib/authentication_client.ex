@@ -25,8 +25,9 @@ defmodule Yudhisthira.AuthenticationClient do
     HTTPotion.post(
       create_url(host, port),
       [
-        headers: Headers.assign_host_headers() |>
-          Headers.assign_session_headers(session_id)
+        headers:
+          Headers.assign_host_headers() |>
+            Headers.assign_session_headers(session_id)
       ]
     )
   end

@@ -44,7 +44,7 @@ defmodule Yudhisthira.Plugs.Http do
 				case session_node do
 					nil -> conn |> put_resp_header(
 						Headers.get_header_from_config(:auth_header),
-						"No-Auth"
+						"No-Auth" # TODO: Make it better
 					)
 					_ -> conn |> put_resp_header(
 						Headers.get_header_from_config(:session_header),
