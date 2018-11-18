@@ -15,7 +15,7 @@ From financial institutions, audit firms to Internet of Things (IoT) networks, Y
 
 ## Why open-source?
 
-We are open-sourcing Yudhisthira from the very start for well thought-out reasons:
+We are open-sourcing Yudhisthira from the very start for well-thought-out reasons:
 
 - a privacy-first application requires industrial-grade scrutiny of its cryptography suites. Opening the application up from early stage enables a broad spectrum of cryptographers, cypherpunks, and corporate to work together.
 - This protocol is meant for providing interoperability in multi-vendor platforms. Thus, it is aligned with the goal to build towards an open-source standard.
