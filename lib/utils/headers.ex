@@ -9,7 +9,7 @@ defmodule Yudhisthira.Utils.Headers do
     headers ++ [
       "#{get_header_from_config(:hostname_header)}": System.get_env("HOST_NAME"),
       "#{get_header_from_config(:hostport_header)}": System.get_env("HOST_PORT"),
-      "#{get_header_from_config(:hostid_header)}": System.get_env("HOST_ID") # TODO: Maybe not? Unused for now
+      "#{get_header_from_config(:hostid_header)}": System.get_env("HOST_ID")
     ]
   end
 
@@ -19,19 +19,40 @@ defmodule Yudhisthira.Utils.Headers do
     ]
   end
 
-  @doc """
-  Gets headers as a list of tuples...
-  """
-  def get_session_id(headers) do
+  def get_header_value(headers, header_symbol) do
     case Enum.find(headers, fn header_kv ->
       {header, _} = header_kv
       cond do
-        header == String.downcase(get_header_from_config(:session_header)) -> true
+        header == String.downcase(get_header_from_config(header_symbol)) -> true
         true -> nil
       end
     end) do
       {_, session_id} -> session_id
       _ -> nil
     end
+  end
+
+  @doc """
+  Gets headers as a list of tuples...
+  """
+  def get_session_id(headers) do
+    headers |> get_header_value(:session_header)
+  end
+
+  def get_host_and_port(headers) do
+    {
+      headers |> get_header_value(:hostname_header),
+      headers |> get_header_value(:hostport_header)
+    }
+  end
+
+  def get_node_id(headers) do
+    headers |> get_header_value(:hostid_header)
+  end
+
+  def identification_headers_exist?(headers) do
+    (headers |> get_header_value(:hostid_header) != nil) and
+    (headers |> get_header_value(:hostport_header) != nil) &&
+    (headers |> get_header_value(:hostname_header) != nil)
   end
 end
