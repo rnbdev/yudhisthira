@@ -42,6 +42,9 @@ defmodule Yudhisthira.Utils.Headers do
     headers |> get_header_value(:session_header)
   end
 
+  @doc """
+  Gets headers as a list of tuples...
+  """
   def get_host_and_port(headers) do
     {
       headers |> get_header_value(:hostname_header),
@@ -49,10 +52,16 @@ defmodule Yudhisthira.Utils.Headers do
     }
   end
 
+  @doc """
+  Gets headers as a list of tuples...
+  """
   def get_node_id(headers) do
     headers |> get_header_value(:hostid_header)
   end
 
+  @doc """
+  Gets headers as a list of tuples...
+  """
   def identification_headers_exist?(headers) do
     (headers |> get_header_value(:hostid_header) != nil) and
     (headers |> get_header_value(:hostport_header) != nil) and
