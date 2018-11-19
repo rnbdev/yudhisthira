@@ -11,6 +11,8 @@ defmodule Yudhisthira.Controllers.AuthenticationController do
 			Base.encode64()
 	end
 
+	# TODO: Maybe it's possible to reduce the number of ping-pongs between nodes
+	# By making things slightly more symmetric
 	def auth_data_step(auth_data, _auth_map) do
 		auth_data = Base.decode64!(auth_data) |> Poison.decode!()
 		IO.inspect(auth_data)
