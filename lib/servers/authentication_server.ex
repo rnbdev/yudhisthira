@@ -1,4 +1,4 @@
-defmodule Yudhisthira.AuthenticationServer do
+defmodule Yudhisthira.Servers.AuthenticationServer do
   use GenServer
   alias Yudhisthira.Structs.NetworkNode
 

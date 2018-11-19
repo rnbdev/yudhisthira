@@ -1,6 +1,7 @@
 defmodule Yudhisthira.AuthenticationClient do
   alias Yudhisthira.Utils.Config
   alias Yudhisthira.Utils.Headers
+  alias Yudhisthira.Auth.SmpAuth
 
   def create_url(host, port) do
     http_proto = case System.get_env("SSL_ENABLED") do
@@ -13,10 +14,17 @@ defmodule Yudhisthira.AuthenticationClient do
 
   def authenticate(host, port) do
     # TODO: Clean up...
+    auth_data = 
+      SmpAuth.create_data_for_step_1() |>
+      Poison.encode!() |>
+      Base.encode64()
+
     response = HTTPotion.post(
       create_url(host, port),
       [
-        headers: Headers.assign_host_headers()
+        headers: 
+          Headers.assign_host_headers() |>
+          Headers.assign_auth_data_header(auth_data)
       ]
     )
 
@@ -27,7 +35,7 @@ defmodule Yudhisthira.AuthenticationClient do
       [
         headers:
           Headers.assign_host_headers() |>
-            Headers.assign_session_headers(session_id)
+          Headers.assign_session_headers(session_id)
       ]
     )
   end

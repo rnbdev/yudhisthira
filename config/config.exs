@@ -33,10 +33,12 @@ config :yudhisthira, authentication_endpoint: "/authenticate"
 config :yudhisthira, authentication_interval: 10_000
 config :yudhisthira, session_lifespan: 20_000
 config :yudhisthira, default_http_port: 4001
+config :yudhisthira, random_exponent_length: 3
 
 config :yudhisthira, header_prefix: "X-Yudhisthira"
 config :yudhisthira, hostname_header: "Hostname"
 config :yudhisthira, hostport_header: "Host-Port"
 config :yudhisthira, hostid_header: "Id"
 config :yudhisthira, session_header: "Session-Id"
+config :yudhisthira, auth_data_header: "Auth-Data"
 config :yudhisthira, auth_header: "Authy"

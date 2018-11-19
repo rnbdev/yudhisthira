@@ -1,7 +1,7 @@
 defmodule Yudhisthira.Controllers.AuthenticationController do
   import Plug.Conn, only: [put_resp_header: 3, send_resp: 3]
 	alias Yudhisthira.Utils.Headers
-	alias Yudhisthira.AuthenticationServer
+	alias Yudhisthira.Servers.AuthenticationServer
 	alias Yudhisthira.Structs.NetworkNode
   
   def handle_authentication_call(conn) do
@@ -10,6 +10,15 @@ defmodule Yudhisthira.Controllers.AuthenticationController do
 		# Throws an error... if not ID headers exist
 		# In the future, can be used to identify nodes from pure-clients
 		true = Headers.identification_headers_exist?(headers)
+
+		# DEBUG
+		case Headers.get_auth_data(headers) do
+			nil -> nil
+			d -> d |> 
+				Base.decode64!() |>
+				Poison.decode!() |>
+				IO.inspect()
+		end
 
 		node = NetworkNode.create(
 			Headers.get_node_address(headers),

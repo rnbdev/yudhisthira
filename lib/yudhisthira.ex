@@ -16,8 +16,8 @@ defmodule Yudhisthira do
     children = [
       # GenServers
       %{
-        id: Yudhisthira.AuthenticationServer,
-        start: {Yudhisthira.AuthenticationServer, :start_link, []}
+        id: Yudhisthira.Servers.AuthenticationServer,
+        start: {Yudhisthira.Servers.AuthenticationServer, :start_link, []}
       },
       # HTTP Endpoints
       plug_child(Yudhisthira.Plugs.Http),
