@@ -5,6 +5,7 @@ defmodule Yudhisthira.Utils.Headers do
     String.downcase("#{Config.config(:header_prefix)}-#{Config.config(header_name)}")
   end
 
+  # Assignment to a key:value list...
   def assign_host_headers(headers \\ []) do
     headers ++ [
       "#{get_header_from_config(:hostname_header)}": System.get_env("HOST_NAME"),
@@ -19,6 +20,8 @@ defmodule Yudhisthira.Utils.Headers do
     ]
   end
 
+  # Does not take care of spaces and don't separate them as lists
+  # Takes everything and shoves it out
   def get_header_value(headers, header_symbol) do
     case Enum.find(headers, fn header_kv ->
       {header, _} = header_kv
@@ -36,27 +39,31 @@ defmodule Yudhisthira.Utils.Headers do
   end
 
   @doc """
-  Gets headers as a list of tuples...
+  Gets header values
   """
   def get_session_id(headers) do
     headers |> get_header_value(:session_header)
   end
 
   @doc """
-  Gets headers as a list of tuples...
-  """
-  def get_host_and_port(headers) do
-    {
-      headers |> get_header_value(:hostname_header),
-      headers |> get_header_value(:hostport_header)
-    }
-  end
-
-  @doc """
-  Gets headers as a list of tuples...
+  Gets header value
   """
   def get_node_id(headers) do
     headers |> get_header_value(:hostid_header)
+  end
+
+  @doc """
+  Gets header value
+  """
+  def get_node_address(headers) do
+    headers |> get_header_value(:hostname_header)
+  end
+
+  @doc """
+  Gets header value
+  """
+  def get_node_port(headers) do
+    headers |> get_header_value(:hostport_header)
   end
 
   @doc """

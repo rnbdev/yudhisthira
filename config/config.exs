@@ -31,6 +31,7 @@ use Mix.Config
 
 config :yudhisthira, authentication_endpoint: "/authenticate"
 config :yudhisthira, authentication_interval: 10_000
+config :yudhisthira, session_lifespan: 20_000
 config :yudhisthira, default_http_port: 4001
 
 config :yudhisthira, header_prefix: "X-Yudhisthira"
