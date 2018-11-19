@@ -12,7 +12,9 @@ defmodule Yudhisthira.Controllers.AuthenticationController do
 	end
 
 	# TODO: Maybe it's possible to reduce the number of ping-pongs between nodes
-	# By making things slightly more symmetric
+	# By making things slightly more symmetric...
+	# However, would introduce slight complications as the last step can be
+	# cancelled by the client... depending on use case, that might be an issue
 	def auth_data_step(auth_data, _auth_map) do
 		auth_data = Base.decode64!(auth_data) |> Poison.decode!()
 		IO.inspect(auth_data)
