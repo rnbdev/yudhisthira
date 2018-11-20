@@ -6,16 +6,27 @@ defmodule Yudhisthira.Servers.AuthenticationServer do
     GenServer.start_link(__MODULE__, %{}, name: __MODULE__)
   end
 
+  def create_new_session(incoming_node) do
+    create_new_session(incoming_node, %{})
+  end
+
   def create_new_session(incoming_node, number_map) do
-    new_session_id = UUID.uuid4(:default)
-    GenServer.cast(__MODULE__, {:push, new_session_id, incoming_node, number_map})
-    new_session_id
+    new_session_id = UUID.uuid4(:default)    
+    {
+      GenServer.call(__MODULE__, {:push, new_session_id, incoming_node, number_map}),
+      new_session_id
+    }
   end
 
   def set_session_data(session_id, incoming_node, number_map) do
     # If sessions exists then set it
-    if get_session_data(session_id, incoming_node) do
-      GenServer.cast(__MODULE__, {:push, session_id, incoming_node, number_map})
+    if get_session_data(session_id, incoming_node) != nil do
+      GenServer.call(__MODULE__, {
+        :push,
+        session_id,
+        incoming_node,
+        number_map
+      })
     end
   end
 
@@ -52,14 +63,18 @@ defmodule Yudhisthira.Servers.AuthenticationServer do
   end
 
   @impl true
-  def handle_cast({:push, session_id, node, number_map}, state) do
-    {:noreply, Map.put_new(state, session_id, {
-      %NetworkNode{
-        ip_address: node.ip_address,
-        port: node.port,
-        id: node.id
-      },
-      number_map
-    })}
+  def handle_call({:push, session_id, node, number_map}, _from, state) do
+    {
+      :reply,
+      :ok,
+      Map.put(state, session_id, {
+        NetworkNode.create(
+          node.ip_address,
+          node.port,
+          node.id
+        ),
+        number_map
+      })
+    }
   end
 end

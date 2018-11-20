@@ -1,27 +1,13 @@
 defmodule Yudhisthira.Controllers.AuthenticationController do
   import Plug.Conn, only: [put_resp_header: 3, send_resp: 3]
 	alias Yudhisthira.Utils.Headers
+	alias Yudhisthira.Utils.Codec
 	alias Yudhisthira.Servers.AuthenticationServer
 	alias Yudhisthira.Structs.NetworkNode
 	alias Yudhisthira.Auth.SmpAuth
 
-	def encode_for_transit(map) do
-		map |>
-			Poison.encode!() |>
-			Base.encode64()
-	end
-
-	# TODO: Maybe it's possible to reduce the number of ping-pongs between nodes
-	# By making things slightly more symmetric...
-	# However, would introduce slight complications as the last step can be
-	# cancelled by the client... depending on use case, that might be an issue
-	def auth_data_step(auth_data, _auth_map) do
-		auth_data = Base.decode64!(auth_data) |> Poison.decode!()
-		IO.inspect(auth_data)
-		case auth_data do
-			nil -> {:error, :no_data}
-			_ -> SmpAuth.create_data_for_step_2_4(auth_data) |> encode_for_transit()
-		end
+	def create_auth_data(auth_data, auth_map) when (auth_data != nil) do
+			SmpAuth.create_data_for_auth(auth_data, auth_map)
 	end
   
   def handle_authentication_call(conn) do
@@ -39,16 +25,13 @@ defmodule Yudhisthira.Controllers.AuthenticationController do
 
 		case Headers.get_session_id(headers) do
 			nil ->
-				new_session_id = AuthenticationServer.create_new_session(
-					node,
-					%{}
-				)
+				{:ok, new_session_id} = AuthenticationServer.create_new_session(node)
 				conn |> put_resp_header(
 					Headers.get_header_from_config(:session_header),
 					new_session_id
 				)
 			session_id -> 
-				{session_node, auth_map} = AuthenticationServer.get_session_data(
+				{session_node, number_map} = AuthenticationServer.get_session_data(
 					session_id,
 					node
 				)
@@ -58,8 +41,29 @@ defmodule Yudhisthira.Controllers.AuthenticationController do
 						"No-Auth" # TODO: Make it better
 					)
 					_ ->
-						{:ok, auth_data} = 
-							Headers.get_auth_data(headers) |> auth_data_step(auth_map)
+						secret = System.get_env("HOST_ID") |> 
+							Base.encode16() |> Integer.parse(16) |> Kernel.elem(0)
+						{:ok, auth_data_map, new_number_map} = 
+							Headers.get_auth_data(headers) |> 
+							Codec.decode_from_transit() |> 
+							create_auth_data(
+								Map.merge(
+									number_map,
+									%{secret: secret}
+								)
+							)
+
+						AuthenticationServer.set_session_data(
+							session_id,
+							node,
+							Map.merge(
+								number_map,
+								new_number_map
+							)
+						)
+
+						auth_data_header_value = auth_data_map |> Codec.encode_for_transit()
+
 						conn |>
 							put_resp_header(
 								Headers.get_header_from_config(:session_header),
@@ -67,7 +71,7 @@ defmodule Yudhisthira.Controllers.AuthenticationController do
 							) |>
 							put_resp_header(
 								Headers.get_header_from_config(:auth_data_header),
-								auth_data
+								auth_data_header_value
 							)
 				end
 		end |> send_resp(200, "")
