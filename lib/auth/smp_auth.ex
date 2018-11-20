@@ -22,11 +22,6 @@ defmodule Yudhisthira.Auth.SmpAuth do
   end
 
   defp sha256(message) do
-    # :crypto.hash(:sha256, message) |>
-    #   Base.encode16() |>
-    #   Integer.parse(16) |>
-    #   Kernel.elem(0)
-
     :crypto.hash(:sha256, message) |>
       :crypto.bytes_to_integer()
   end
