@@ -54,6 +54,8 @@ defmodule Yudhisthira.AuthenticationClient do
       new_number_map
     )
 
+    # IO.inspect(auth_data_step_3)
+
     auth_data_step_3 = auth_data_step_3 |> Codec.encode_for_transit()
 
     response = HTTPotion.post(
@@ -70,8 +72,24 @@ defmodule Yudhisthira.AuthenticationClient do
     true = HTTPotion.Response.success?(response)
     session_id = response.headers[Headers.get_header_from_config(:session_header)]
     
+    # IO.inspect(number_map_to_keep)
+    # IO.inspect(number_map_to_keep_3)
     auth_data_step_4 = response.headers[Headers.get_header_from_config(:auth_data_header)] |>
       Codec.decode_from_transit()
+    
+    # IO.inspect(auth_data_step_4)
+
+    SmpAuth.check_auth_data_final(
+      auth_data_step_4["rb"],
+      auth_data_step_4["c8"],
+      auth_data_step_4["d10"],
+      number_map_to_keep.x3,
+      number_map_to_keep_3.pa,
+      number_map_to_keep_3.pb,
+      number_map_to_keep_3.g3b,
+      number_map_to_keep_3.qa,
+      number_map_to_keep_3.qb
+    )
   end
 
   def authenticate(node, secret) do

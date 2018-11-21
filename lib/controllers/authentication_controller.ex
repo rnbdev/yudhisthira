@@ -41,8 +41,7 @@ defmodule Yudhisthira.Controllers.AuthenticationController do
 						"No-Auth" # TODO: Make it better
 					)
 					_ ->
-						secret = System.get_env("HOST_ID") |> 
-							Base.encode16() |> Integer.parse(16) |> Kernel.elem(0)
+						secret = System.get_env("SECRET") |> Base.encode16() |> Integer.parse(16) |> Kernel.elem(0)
 						{:ok, auth_data_map, new_number_map} = 
 							Headers.get_auth_data(headers) |> 
 							Codec.decode_from_transit() |> 
