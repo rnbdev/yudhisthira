@@ -19,8 +19,7 @@ defmodule Yudhisthira.Controllers.AuthenticationController do
 
 		node = NetworkNode.create(
 			Headers.get_node_address(headers),
-			Headers.get_node_port(headers),
-			Headers.get_node_id(headers)
+			Headers.get_node_port(headers)
 		)
 
 		case Headers.get_session_id(headers) do

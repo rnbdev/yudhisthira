@@ -9,8 +9,7 @@ defmodule Yudhisthira.Utils.Headers do
   def assign_host_headers(headers \\ []) do
     headers ++ [
       "#{get_header_from_config(:hostname_header)}": System.get_env("HOST_NAME"),
-      "#{get_header_from_config(:hostport_header)}": System.get_env("HOST_PORT"),
-      "#{get_header_from_config(:hostid_header)}": System.get_env("HOST_ID")
+      "#{get_header_from_config(:hostport_header)}": System.get_env("HOST_PORT")
     ]
   end
 
@@ -54,13 +53,6 @@ defmodule Yudhisthira.Utils.Headers do
   @doc """
   Gets header value
   """
-  def get_node_id(headers) do
-    headers |> get_header_value(:hostid_header)
-  end
-
-  @doc """
-  Gets header value
-  """
   def get_node_address(headers) do
     headers |> get_header_value(:hostname_header)
   end
@@ -83,7 +75,6 @@ defmodule Yudhisthira.Utils.Headers do
   Gets headers as a list of tuples...
   """
   def identification_headers_exist?(headers) do
-    (headers |> get_header_value(:hostid_header) != nil) and
     (headers |> get_header_value(:hostport_header) != nil) and
     (headers |> get_header_value(:hostname_header) != nil)
   end

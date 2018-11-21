@@ -70,8 +70,7 @@ defmodule Yudhisthira.Servers.AuthenticationServer do
       Map.put(state, session_id, {
         NetworkNode.create(
           node.ip_address,
-          node.port,
-          node.id
+          node.port
         ),
         number_map
       })

@@ -7,14 +7,13 @@ defmodule Yudhisthira.Structs.NetworkNode do
     node1.port == node2.port
   end
 
-  def create(ip_address, port, id) do
+  def create(ip_address, port) do
 		%NetworkNode{
       ip_address: ip_address,
       port: case is_bitstring(port) do
         true -> port |> Integer.parse() |> Kernel.elem(0)
         false -> port
-      end,
-      id: id
+      end
     }
   end
 end
