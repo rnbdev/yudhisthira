@@ -10,22 +10,22 @@ defmodule Yudhisthira.Servers.AuthenticationServer do
     create_new_session(incoming_node, %{})
   end
 
-  def create_new_session(incoming_node, number_map) do
+  def create_new_session(incoming_node, state_map) do
     new_session_id = UUID.uuid4(:default)    
     {
-      GenServer.call(__MODULE__, {:push, new_session_id, incoming_node, number_map}),
+      GenServer.call(__MODULE__, {:push, new_session_id, incoming_node, state_map}),
       new_session_id
     }
   end
 
-  def set_session_data(session_id, incoming_node, number_map) do
+  def set_session_data(session_id, incoming_node, state_map) do
     # If sessions exists then set it
     if get_session_data(session_id, incoming_node) != nil do
       GenServer.call(__MODULE__, {
         :push,
         session_id,
         incoming_node,
-        number_map
+        state_map
       })
     end
   end
@@ -63,7 +63,7 @@ defmodule Yudhisthira.Servers.AuthenticationServer do
   end
 
   @impl true
-  def handle_call({:push, session_id, node, number_map}, _from, state) do
+  def handle_call({:push, session_id, node, state_map}, _from, state) do
     {
       :reply,
       :ok,
@@ -72,7 +72,7 @@ defmodule Yudhisthira.Servers.AuthenticationServer do
           node.ip_address,
           node.port
         ),
-        number_map
+        state_map
       })
     }
   end
