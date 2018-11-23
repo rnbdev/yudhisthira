@@ -51,6 +51,8 @@ defmodule Yudhisthira.Controllers.AuthenticationController do
 							{:ok, auth_data} -> 
 								case create_auth_data(auth_data, number_map) do
 									{:ok, new_auth_data, new_number_map} -> 
+										# TODO: Fire a notification and destroy the session!
+
 										case new_number_map do
 											%{match: x} -> case x do
 												true -> Logger.info("MATCHED")
