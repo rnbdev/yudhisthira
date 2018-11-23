@@ -49,37 +49,40 @@ defmodule Yudhisthira.Controllers.AuthenticationController do
 					_ ->
 						case Headers.get_auth_data(headers) |> Codec.decode_from_transit() do
 							{:ok, auth_data} -> 
-								{:ok, new_auth_data, new_number_map} = create_auth_data(auth_data, number_map)
-
-								case new_number_map do
-									%{match: x} -> case x do
-										true -> Logger.info("MATCHED")
-										false -> Logger.info("NOT MATCHED")
-									end
-									_ -> nil
+								case create_auth_data(auth_data, number_map) do
+									{:ok, new_auth_data, new_number_map} -> 
+										case new_number_map do
+											%{match: x} -> case x do
+												true -> Logger.info("MATCHED")
+												false -> Logger.info("NOT MATCHED")
+											end
+											_ -> nil
+										end
+	
+										:ok = AuthenticationServer.set_session_data(
+											session_id,
+											node,
+											Map.merge(
+												number_map,
+												new_number_map
+											)
+										)
+	
+										{:ok, auth_data_header_value} = 
+											new_auth_data |> Codec.encode_for_transit()
+	
+										conn |>
+											put_resp_header(
+												Headers.get_header_from_config(:session_header),
+												session_id
+											) |>
+											put_resp_header(
+												Headers.get_header_from_config(:auth_data_header),
+												auth_data_header_value
+											) |> resp(200, "")
+									{:error, :badrequest, _} -> 
+										conn |> resp(400, "")
 								end
-
-								:ok = AuthenticationServer.set_session_data(
-									session_id,
-									node,
-									Map.merge(
-										number_map,
-										new_number_map
-									)
-								)
-
-								{:ok, auth_data_header_value} = 
-									new_auth_data |> Codec.encode_for_transit()
-
-								conn |>
-									put_resp_header(
-										Headers.get_header_from_config(:session_header),
-										session_id
-									) |>
-									put_resp_header(
-										Headers.get_header_from_config(:auth_data_header),
-										auth_data_header_value
-									) |> resp(200, "")
 							{:error, :badrequest} -> 
 								conn |> resp(400, "")
 						end
