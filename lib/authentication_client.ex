@@ -15,7 +15,7 @@ defmodule Yudhisthira.AuthenticationClient do
 
   def authenticate(host, port, secret) do
     # Sessionize
-    response = HTTPotion.post(
+    response = HTTPotion.get(
       create_url(host, port),
       [
         headers: Headers.assign_host_headers()
@@ -27,9 +27,9 @@ defmodule Yudhisthira.AuthenticationClient do
 
     # Step 1
     {:ok, auth_data_step_1, number_map_to_keep} = SmpAuth.create_data_for_auth()
-    auth_data_step_1 = auth_data_step_1 |> Codec.encode_for_transit()
+    {:ok, auth_data_step_1} = auth_data_step_1 |> Codec.encode_for_transit()
     
-    response = HTTPotion.post(
+    response = HTTPotion.get(
       create_url(host, port),
       [
         headers:
@@ -42,7 +42,7 @@ defmodule Yudhisthira.AuthenticationClient do
     # Step 2 -- Coming back
     true = HTTPotion.Response.success?(response)
     session_id = response.headers[Headers.get_header_from_config(:session_header)]
-    auth_data_step_2 = response.headers[Headers.get_header_from_config(:auth_data_header)] |>
+    {:ok, auth_data_step_2} = response.headers[Headers.get_header_from_config(:auth_data_header)] |>
       Codec.decode_from_transit()
 
     # Step 3
@@ -52,9 +52,9 @@ defmodule Yudhisthira.AuthenticationClient do
       new_number_map
     )
 
-    auth_data_step_3 = auth_data_step_3 |> Codec.encode_for_transit()
+    {:ok, auth_data_step_3} = auth_data_step_3 |> Codec.encode_for_transit()
 
-    response = HTTPotion.post(
+    response = HTTPotion.get(
       create_url(host, port),
       [
         headers:
@@ -67,7 +67,7 @@ defmodule Yudhisthira.AuthenticationClient do
     # Step 4 -- Coming back
     true = HTTPotion.Response.success?(response)
     
-    auth_data_step_4 = response.headers[Headers.get_header_from_config(:auth_data_header)] |>
+    {:ok, auth_data_step_4} = response.headers[Headers.get_header_from_config(:auth_data_header)] |>
       Codec.decode_from_transit()
 
     SmpAuth.check_auth_data_final(

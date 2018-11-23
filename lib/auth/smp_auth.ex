@@ -1,5 +1,6 @@
 defmodule Yudhisthira.Auth.SmpAuth do
   import Yudhisthira.Utils.Math
+  require Logger
 
   @mod 2410312426921032588552076022197566074856950548502459942654116941958108831682612228890093858261341614673227141477904012196503648957050582631942730706805009223062734745341073406696246014589361659774041027169249453200378729434170325843778659198143763193776859869524088940195577346119843545301547043747207749969763750084308926339295559968882457872412993810129130294592999947926365264059284647209730384947211681434464714438488520940127459844288859336526896320919633919
   @mod_order div(@mod - 1, 2)
@@ -156,14 +157,14 @@ defmodule Yudhisthira.Auth.SmpAuth do
     }
   ) do
     if (not valid_argument?(g2a)) or (not valid_argument?(g3a)) do
-      IO.puts("g2a, g3a failed")
+      Logger.info("g2a, g3a args failed")
     end
 
     if not check_log_proof("1", g2a, c1, d1) do
-      IO.puts("Proof 1 check failed")
+      Logger.info("Proof 1 check failed")
     end
     if not check_log_proof("2", g3a, c2, d2) do
-      IO.puts("Proof 2 check failed")
+      Logger.info("Proof 2 check failed")
     end
 
     x2 = create_random_exponent()
@@ -192,17 +193,17 @@ defmodule Yudhisthira.Auth.SmpAuth do
     {
       :ok,
       %{
-        g2: g2,
-        g3: g3,
-        pb: pb,
-        qb: qb,
-        c3: c3,
-        d3: d3,
-        c4: c4,
-        d4: d4,
-        c5: c5,
-        d5: d5,
-        d6: d6
+        "g2" => g2,
+        "g3" => g3,
+        "pb" => pb,
+        "qb" => qb,
+        "c3" => c3,
+        "d3" => d3,
+        "c4" => c4,
+        "d4" => d4,
+        "c5" => c5,
+        "d5" => d5,
+        "d6" => d6
       },
       %{
         g2a: g2a,
@@ -238,23 +239,21 @@ defmodule Yudhisthira.Auth.SmpAuth do
       secret: secret,
       x2: x2,
       x3: x3,
-      g2: _,
-      g3: _
     }
   ) do
     if (not valid_argument?(g2b)) or
       (not valid_argument?(g3b)) or
       (not valid_argument?(pb)) or
       (not valid_argument?(qb)) do
-        IO.puts("args failed")
+        Logger.info("step 3 args failed")
     end
 
     if not check_log_proof("3", g2b, c3, d3) do
-      IO.puts("log proof 3 check failed")
+      Logger.info("log proof 3 check failed")
     end
 
     if not check_log_proof("4", g3b, c4, d4) do
-      IO.puts("log proof 4 check faile")
+      Logger.info("log proof 4 check failed")
     end
 
     ga2 = pow(g2b, x2, @mod)
@@ -287,14 +286,14 @@ defmodule Yudhisthira.Auth.SmpAuth do
     {
       :ok,
       %{
-        pa: pa,
-        qa: qa,
-        ra: ra,
-        c6: c6,
-        d7: d7,
-        d8: d8,
-        c7: c7,
-        d9: d9
+        "pa" => pa,
+        "qa" => qa,
+        "ra" => ra,
+        "c6" => c6,
+        "d7" => d7,
+        "d8" => d8,
+        "c7" => c7,
+        "d9" => d9
       },
       %{
         g2b: g2b,
@@ -323,34 +322,29 @@ defmodule Yudhisthira.Auth.SmpAuth do
       "d9" => d9
     },
     %{
-      g2: _,
-      g2a: _,
-      g3: _,
       g3a: g3a,
       gb2: gb2,
       gb3: gb3,
       pb: pb,
       qb: qb,
-      secret: _,
-      x2: _,
       x3: x3
     }
   ) do
     if (not valid_argument?(pa)) or
       (not valid_argument?(qa)) or
       (not valid_argument?(ra)) do
-      IO.puts("Args failed")
+      Logger.info("Args failed")
     end
 
     if not check_coords_proof("6", c6, d7, d8, gb2, gb3, pa, qa) do
-      IO.puts("Proof 6 failed")
+      Logger.info("Proof 6 failed")
     end
 
     if not check_equal_logs("7", c7, d9, g3a, 
       mulm(qa, invm(qb), @mod),
       ra
     ) do
-      IO.puts("Proof 7 failed")
+      Logger.info("Proof 7 failed")
     end
 
     inv = invm(qb)
@@ -367,38 +361,38 @@ defmodule Yudhisthira.Auth.SmpAuth do
     inv = invm(pb)
 
     match = rab == mulm(pa, inv, @mod)
-    IO.puts("#Matched: #{match}")
 
     {
       :ok,
       %{
-        rb: rb,
-        c8: c8,
-        d10: d10
+        "rb" => rb,
+        "c8" => c8,
+        "d10" => d10
       },
-      %{
-        match: match
-      }
+      %{match: match}
     }
   end
 
   def check_auth_data_final(rb, c8, d10, x3, pa, pb, g3b, qa, qb) do
     if not valid_argument?(rb) do
-      IO.puts("Invalid rb value")
+      Logger.info("Invalid rb value")
     end
       
     if not check_equal_logs("8", c8, d10, g3b,
       mulm(qa, invm(qb), @mod),
       rb
     ) do
-      IO.puts("Proof 8 failed")
+      Logger.info("Proof 8 failed")
     end
 
     rab = pow(rb, x3, @mod)
 
     inv = invm(pb)
 
-    match = rab == mulm(pa, inv, @mod)
-    IO.puts("#Matched: #{match}")
+    case rab == mulm(pa, inv, @mod) do
+      true -> {:ok, :match}
+      false -> {:error, :nomatch}
+    end
+    
   end
 end

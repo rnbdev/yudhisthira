@@ -5,7 +5,7 @@ defmodule Yudhisthira.Plugs.Http do
 	plug :match
 	plug :dispatch
 	
-	post Application.get_env(:yudhisthira, :authentication_endpoint) do
+	get Application.get_env(:yudhisthira, :authentication_endpoint) do
 		AuthenticationController.handle_authentication_call(conn)
 	end
 

@@ -1,9 +1,12 @@
 defmodule Yudhisthira.Utils.Codec do
   def encode_for_transit(payload) do
-    payload |> Poison.encode!() |> Base.encode64()
+    {:ok, payload |> Poison.encode!() |> Base.encode64()}
   end
 
   def decode_from_transit(data) do
-    data |> Base.decode64!() |> Poison.decode!()
+    case Base.decode64(data) do
+      {:ok, data_string} -> Poison.decode(data_string)
+      {:error, _} -> {:error, :badrequest}
+    end
   end
 end
