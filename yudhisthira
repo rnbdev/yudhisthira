@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+if [[ "$1" == "install" ]]
+then
+    mix deps.get
+fi
+
+if [[ "$1" == "run" ]]
+then
+    shift
+    mix run --no-start --no-halt -e "Yudhisthira.CLI.start()" -- $@
+fi
+
+if [[ "$1" == "authenticate" ]]
+then
+    shift
+    mix run --no-start --no-halt -e "Yudhisthira.CLI.authenticate()" -- $@
+fi
+
+if [[ "$1" == "add-peer" ]]
+then
+    shift
+    mix run --no-start --no-halt -e "Yudhisthira.CLI.authenticate()" -- $@
+fi

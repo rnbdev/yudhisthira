@@ -5,7 +5,11 @@ defmodule Yudhisthira.AuthenticationClient do
   alias Yudhisthira.Auth.SmpAuth
 
   def create_url(host, port) do
-    "#{host}:#{port}#{Config.config(:authentication_endpoint)}"
+    http_proto = case Config.config(:ssl_enabled) do
+      true -> "https"
+      false -> "http"
+    end
+    "#{http_proto}://#{host}:#{port}#{Config.config(:authentication_endpoint)}"
   end
 
   def sessionize(host, port) do

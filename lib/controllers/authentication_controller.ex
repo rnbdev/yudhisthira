@@ -1,5 +1,6 @@
 defmodule Yudhisthira.Controllers.AuthenticationController do
 	import Plug.Conn, only: [put_resp_header: 3, send_resp: 1, resp: 3]
+	import Yudhisthira.Utils.Config, only: [config: 1]
 	require Logger
 	alias Yudhisthira.Utils.Headers
 	alias Yudhisthira.Utils.Codec
@@ -8,7 +9,7 @@ defmodule Yudhisthira.Controllers.AuthenticationController do
 	alias Yudhisthira.Servers.AuthenticationServer
 	alias Yudhisthira.Servers.SecretsRepo
 
-	@secret System.get_env("DID_STRING")
+	@secret config(:secret)
 
 	def create_auth_data(auth_data, auth_map) do
 		case auth_data do

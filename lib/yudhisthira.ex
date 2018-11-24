@@ -1,18 +1,15 @@
 defmodule Yudhisthira do
+  import Yudhisthira.Utils.Config, only: [config: 1]
+  require Logger
   use Application
 
   def plug_child(plug) do
-    port = case System.get_env("HTTP_PORT") do
-      nil -> Application.get_env(:yudhisthira, :default_http_port)
-      n -> (fn port ->
-        {port, _} = Integer.parse(port)
-        port
-      end).(n)
-    end
+    port = config(:http_port)
     Plug.Cowboy.child_spec(scheme: :http, plug: plug, options: [port: port])
   end
 
   def start(_type, _args) do
+    Logger.info("Application starting on #{config(:http_port)}...")
     children = [
       # GenServers
       %{
