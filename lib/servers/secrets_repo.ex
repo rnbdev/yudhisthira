@@ -27,6 +27,12 @@ defmodule Yudhisthira.Servers.SecretsRepo do
     })
   end
 
+  def get_all_secrets() do
+    GenServer.call(__MODULE__, {
+      :getall
+    })
+  end
+
   @impl true
   def init(stack) do
     {:ok, stack}
@@ -44,6 +50,15 @@ defmodule Yudhisthira.Servers.SecretsRepo do
   end
 
   @impl true
+  def handle_call({:getall}, _from, state) do
+    {
+      :reply,
+      state,
+      state
+    }
+  end
+
+  @impl true
   def handle_call({:delete, secret_key}, _from, state) do
     {
       :reply,
@@ -56,7 +71,7 @@ defmodule Yudhisthira.Servers.SecretsRepo do
   def handle_call({:get, secret_key}, _from, state) do
     {
       :reply,
-      {:ok, Map.get(state, secret_key)},
+      Map.get(state, secret_key),
       state
     }
   end

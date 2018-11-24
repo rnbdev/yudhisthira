@@ -21,8 +21,7 @@ defmodule Yudhisthira.AuthenticationClient do
     HTTPotion.get(
       create_url(host, port),
       [
-        headers: Headers.assign_host_headers() |>
-          Headers.assign_secret_key_header(secret_key |> Codec.encode_for_transit())
+        headers: Headers.assign_host_headers() |> Headers.assign_secret_key_header(secret_key)
       ]
     )
   end
@@ -32,7 +31,6 @@ defmodule Yudhisthira.AuthenticationClient do
   end
 
   def authenticate(host, port, secret_key, secret) do
-    # Sessionize
     sessionize(host, port, secret_key) |> authenticate_smp(host, port, secret)
   end
 
@@ -43,8 +41,6 @@ defmodule Yudhisthira.AuthenticationClient do
     # Step 1
     {:ok, auth_data_step_1, number_map_to_keep} = SmpAuth.create_data_for_auth()
     {:ok, auth_data_step_1} = auth_data_step_1 |> Codec.encode_for_transit()
-
-    IO.inspect(session_response)
     
     response = HTTPotion.get(
       create_url(host, port),

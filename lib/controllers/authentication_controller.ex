@@ -3,11 +3,12 @@ defmodule Yudhisthira.Controllers.AuthenticationController do
 	require Logger
 	alias Yudhisthira.Utils.Headers
 	alias Yudhisthira.Utils.Codec
-	alias Yudhisthira.Servers.AuthenticationServer
 	alias Yudhisthira.Structs.NetworkNode
 	alias Yudhisthira.Auth.SmpAuth
+	alias Yudhisthira.Servers.AuthenticationServer
+	alias Yudhisthira.Servers.SecretsRepo
 
-	@secret System.get_env("SECRET") |> Base.encode16() |> Integer.parse(16) |> Kernel.elem(0)
+	@secret System.get_env("SECRET")
 
 	def create_auth_data(auth_data, auth_map) do
 		case auth_data do
@@ -18,6 +19,28 @@ defmodule Yudhisthira.Controllers.AuthenticationController do
 				e in MatchError -> {:error, :badrequest, e}
 			end
 		end
+	end
+
+	def resolve_secret(headers) do
+		case headers |> Headers.get_secret_key() do
+			nil -> {:ok, @secret |> Codec.encode_secret()}
+			secret_key -> case SecretsRepo.get_secret(secret_key) do
+				nil -> {:error, :badrequest}
+				secret_value -> {:ok, secret_value |> Codec.encode_secret()}
+			end
+		end
+	end
+
+	def sessionize_incoming_connection(conn, node, secret_value) do
+		{:ok, new_session_id} = AuthenticationServer.create_new_session(
+			node,
+			%{secret: secret_value}
+		)
+		conn |>
+			put_resp_header(
+				Headers.get_header_from_config(:session_header),
+				new_session_id
+			) |> resp(200, "")
 	end
   
   def handle_authentication_call(conn) do
@@ -30,15 +53,10 @@ defmodule Yudhisthira.Controllers.AuthenticationController do
 
 		case Headers.get_session_id(headers) do
 			nil ->
-				{:ok, new_session_id} = AuthenticationServer.create_new_session(
-					node,
-					%{secret: @secret}
-				)
-				conn |>
-					put_resp_header(
-						Headers.get_header_from_config(:session_header),
-						new_session_id
-					) |> resp(200, "")
+				case resolve_secret(headers) do
+					{:error, :badrequest} -> conn |> resp(400, "")
+					{:ok, secret_value} -> conn |> sessionize_incoming_connection(node, secret_value)
+				end
 			session_id -> 
 				{session_node, number_map} = AuthenticationServer.get_session_data(
 					session_id,

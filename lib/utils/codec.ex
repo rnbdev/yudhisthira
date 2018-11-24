@@ -16,4 +16,8 @@ defmodule Yudhisthira.Utils.Codec do
       {:error, _} -> {:error, :badrequest}
     end
   end
+
+  def encode_secret(secret) do
+    secret |> Base.encode16() |> Integer.parse(16) |> elem(0) 
+  end
 end
