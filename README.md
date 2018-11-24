@@ -15,7 +15,7 @@ Yudhisthira is ideal for enterprise and permissioned networks where trust is a t
 
 From financial institutions, audit firms to Internet of Things (IoT) networks, Yudhisthira can be used out-of-the-box and setup in minutes for a variety of domains. A credit scoring institution proving that a particular user is credit worthy without sharing the credit score? Third-party audit firms ensuring the validity of a transaction between two entitites without knowing the transaction details? Two IoT devices proving to each other that they are from the same manufacturer without sharing the manufacturer details? The possibilities are endless.
 
-## Usage and demonstration
+## Usage
 
 Before you start, you would need to install Elixir (> 1.6).
 
