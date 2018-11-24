@@ -5,29 +5,46 @@ defmodule Yudhisthira.AuthenticationClient do
   alias Yudhisthira.Auth.SmpAuth
 
   def create_url(host, port) do
-    http_proto = case System.get_env("SSL_ENABLED") do
-      nil -> "http"
-      _ -> "https"
-    end
-
-    "#{http_proto}://#{host}:#{port}#{Config.config(:authentication_endpoint)}"
+    "#{host}:#{port}#{Config.config(:authentication_endpoint)}"
   end
 
-  def authenticate(host, port, secret) do
-    # Sessionize
-    response = HTTPotion.get(
+  def sessionize(host, port) do
+    HTTPotion.get(
       create_url(host, port),
       [
         headers: Headers.assign_host_headers()
       ]
     )
+  end
 
-    true = HTTPotion.Response.success?(response)
-    session_id = response.headers[Headers.get_header_from_config(:session_header)]
+  def sessionize(host, port, secret_key) do
+    HTTPotion.get(
+      create_url(host, port),
+      [
+        headers: Headers.assign_host_headers() |>
+          Headers.assign_secret_key_header(secret_key |> Codec.encode_for_transit())
+      ]
+    )
+  end
+
+  def authenticate(host, port, secret) do
+    sessionize(host, port) |> authenticate_smp(host, port, secret)
+  end
+
+  def authenticate(host, port, secret_key, secret) do
+    # Sessionize
+    sessionize(host, port, secret_key) |> authenticate_smp(host, port, secret)
+  end
+
+  defp authenticate_smp(session_response, host, port, secret) do
+    true = HTTPotion.Response.success?(session_response)
+    session_id = session_response.headers[Headers.get_header_from_config(:session_header)]
 
     # Step 1
     {:ok, auth_data_step_1, number_map_to_keep} = SmpAuth.create_data_for_auth()
     {:ok, auth_data_step_1} = auth_data_step_1 |> Codec.encode_for_transit()
+
+    IO.inspect(session_response)
     
     response = HTTPotion.get(
       create_url(host, port),
@@ -81,9 +98,5 @@ defmodule Yudhisthira.AuthenticationClient do
       number_map_to_keep_3.qa,
       number_map_to_keep_3.qb
     )
-  end
-
-  def authenticate(node, secret) do
-    authenticate(node.ip_address, node.port, secret)
   end
 end

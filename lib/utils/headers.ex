@@ -25,6 +25,12 @@ defmodule Yudhisthira.Utils.Headers do
     ]
   end
 
+  def assign_secret_key_header(headers, secret_key_value) do
+    headers ++ [
+      "#{get_header_from_config(:secret_key_header)}": secret_key_value
+    ]
+  end
+
   # Does not take care of spaces and don't separate them as lists
   # Takes everything and shoves it out
   def get_header_value(headers, header_symbol) do
@@ -62,6 +68,13 @@ defmodule Yudhisthira.Utils.Headers do
   """
   def get_auth_data(headers) do
     headers |> get_header_value(:auth_data_header)
+  end
+
+  @doc """
+  Gets header value
+  """
+  def get_secret_key(headers) do
+    headers |> get_header_value(:secret_key_header)
   end
 
   @doc """

@@ -23,3 +23,5 @@ erl_crash.dump
 yudhisthira-*.tar
 
 .elixir_ls
+
+worklog.txt

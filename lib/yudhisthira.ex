@@ -16,6 +16,10 @@ defmodule Yudhisthira do
     children = [
       # GenServers
       %{
+        id: Yudhisthira.Servers.SecretsRepo,
+        start: {Yudhisthira.Servers.SecretsRepo, :start_link, []}
+      },
+      %{
         id: Yudhisthira.Servers.AuthenticationServer,
         start: {Yudhisthira.Servers.AuthenticationServer, :start_link, []}
       },
