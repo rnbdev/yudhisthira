@@ -15,7 +15,7 @@ defmodule Yudhisthira.MixProject do
   def application do
     [
       mod: {Yudhisthira, []},
-      extra_applications: [:logger]
+      extra_applications: [:logger, :httpotion]
     ]
   end
 

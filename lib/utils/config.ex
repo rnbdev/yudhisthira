@@ -4,7 +4,9 @@ defmodule Yudhisthira.Utils.Config do
     http_port: :port,
     host_port: :port,
     ssl_enabled: :https,
-    secret: :secret
+    secret: :secret,
+    secret_key: :secret_key, # Only for CLI
+    port: :port # Only for CLI
   }
 
   def special_mapper(symbol, value) do
@@ -12,12 +14,17 @@ defmodule Yudhisthira.Utils.Config do
       :http_port ->
         cond do
           is_bitstring(value) -> Integer.parse(value) |> elem(0)
-          true -> nil
+          true -> value
         end
       :host_port ->
         cond do
           is_bitstring(value) -> Integer.parse(value) |> elem(0)
-          true -> nil
+          true -> value
+        end
+      :port ->
+        cond do
+          is_bitstring(value) -> Integer.parse(value) |> elem(0)
+          true -> value
         end
       _ -> value
     end
