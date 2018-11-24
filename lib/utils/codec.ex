@@ -1,9 +1,9 @@
 defmodule Yudhisthira.Utils.Codec do
-  def encode_for_transit(payload = %{}) do
+  def encode_for_transit(payload) when is_map(payload) do
     {:ok, payload |> Poison.encode!() |> Base.encode64()}
   end
 
-  def encode_for_transit(payload) do
+  def encode_for_transit(payload) when is_bitstring(payload) do
     {:ok, payload |> Base.encode64()}
   end
 
@@ -17,7 +17,7 @@ defmodule Yudhisthira.Utils.Codec do
     end
   end
 
-  def encode_secret(secret) do
+  def encode_secret(secret) when is_bitstring(secret) do
     secret |> Base.encode16() |> Integer.parse(16) |> elem(0) 
   end
 end

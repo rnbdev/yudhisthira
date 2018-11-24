@@ -1,2 +1,2 @@
 export HOST_NAME="http://127.0.0.1"
-export SECRET="Blablablabla"
+export DID_STRING="did:235246462:24643656:54636"
