@@ -24,8 +24,8 @@ git clone https://github.com/getonchain/yudhisthira
 cd yudhisthira
 
 # NOTE: These scripts are for development use only...
-./yudhisthira.sh install
-./yudhisthira.sh run --port 4002 # Warming: This opens a HTTP /admin endpoint in dev mode for modifying & adding secrets
+./yudhisthira install
+./yudhisthira run --port 4002 # Warming: This opens a HTTP /admin endpoint in dev mode for modifying & adding secrets
 ```
 
 Open a new terminal,
