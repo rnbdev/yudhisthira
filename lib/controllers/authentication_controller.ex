@@ -9,7 +9,7 @@ defmodule Yudhisthira.Controllers.AuthenticationController do
 	alias Yudhisthira.Servers.AuthenticationServer
 	alias Yudhisthira.Servers.SecretsRepo
 
-	@secret config(:secret)
+	@secret config(:embedded_secret)
 
 	def create_auth_data(auth_data, auth_map) do
 		case auth_data do

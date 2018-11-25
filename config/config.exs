@@ -35,6 +35,7 @@ config :yudhisthira, smp_mod: 24103124269210325885520760221975660748569505485024
 config :yudhisthira, authentication_interval: 10_000
 config :yudhisthira, session_lifespan: 20_000
 config :yudhisthira, admin_port: 3000
+config :yudhisthira, embedded_secret: "Embedded-Secret"
 
 config :yudhisthira, header_prefix: "X-Yudhisthira"
 config :yudhisthira, hostname_header: "Hostname"
@@ -50,4 +51,3 @@ config :yudhisthira, http_port: 4001
 config :yudhisthira, host_port: 4001
 config :yudhisthira, http_host: "127.0.0.1"
 config :yudhisthira, ssl_enabled: false
-config :yudhisthira, secret: "Hello-World"
