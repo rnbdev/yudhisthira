@@ -11,10 +11,25 @@ defmodule Yudhisthira.Plugs.Http do
 		AuthenticationController.handle_authentication_call(conn)
 	end
 
+	# TODO: Cleanup the mess
 	post config(:admin_endpoint) do
 		case System.get_env("MIX_ENV") == "dev" do
 			false -> conn |> send_resp(404, "")
 			true -> AdminController.add_secret(conn)
+		end
+	end
+
+	get config(:admin_endpoint) do
+		case System.get_env("MIX_ENV") == "dev" do
+			false -> conn |> send_resp(404, "")
+			true -> AdminController.list_secret(conn)
+		end
+	end
+
+	delete config(:admin_endpoint) do
+		case System.get_env("MIX_ENV") == "dev" do
+			false -> conn |> send_resp(404, "")
+			true -> AdminController.delete_secret(conn)
 		end
 	end
 

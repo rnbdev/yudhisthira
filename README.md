@@ -19,27 +19,41 @@ From financial institutions, audit firms to Internet of Things (IoT) networks, Y
 
 Before you start, you would need to install Elixir (> 1.6).
 
+NOTE: These scripts are for development use only...
+
 ```bash
 git clone https://github.com/getonchain/yudhisthira
 cd yudhisthira
 
-# NOTE: These scripts are for development use only...
 ./yudhisthira install
-./yudhisthira run --port 4002 # Warming: This opens a HTTP /admin endpoint in dev mode for modifying & adding secrets
+# You can add a --port <PORT> to override the deafult port of 4001
+./yudhisthira run # Warning: This opens a HTTP /admin endpoint in dev mode for modifying & adding secrets
 ```
 
 Open a new terminal,
 ```bash
 # Navigate to the previous directory on a new terminal
 
+# If your node is running on some other port other than the default 4001, add the --port CLI arg.
+
 # Let's add a secret key value pair
-./yudhisthira --addsecret --port 4002 --secret secretvalue1234 --secret_key secretkey1234
+./yudhisthira --addsecret --secret-value secretvalue1234 --secret-key secretkey1234
 # Should prompt a secret added sign
 
 # Now let's check if the verification works
-./yudhisthira --authenticate --port 4002 --secret secretvalue1234 --secret_key secretkey1234
+./yudhisthira --authenticate --secret-value secretvalue1234 --secret-key secretkey1234
 # Should prompt a secret matched sign
-# This spins up a server-less version of a Yudhisthira and verifies the keys with Socialist Millionaire Protocol
+# This spins up a server-less version of a Yudhisthira instance and verifies the keys with Socialist Millionaire Protocol
+
+# Now let's see all the secret key-value pairs we have on our node
+./yudhisthira --list-secrets
+
+# Now let's delete a key
+./yudhisthira --delete-secret --secret-key secretkey1234
+
+# Now let's see of the secrets match or not
+./yudhisthira --authenticate --secret-key secretkey1234 --secret-value secretvalue1234
+# Should prompt that secrets didn't match
 ```
 
 ## Why open-source?
