@@ -54,6 +54,13 @@ Open a new terminal,
 # Now let's see of the secrets match or not
 ./yudhisthira --authenticate --secret-key secretkey1234 --secret-value secretvalue1234
 # Should prompt that secrets didn't match
+
+# You can also update a secret
+./yudhisthira --update-key --secret-key secretkey1234 --secret-value newsecretvalue4321
+
+# And then verify
+./yudhisthira --authenticate --secret-key secretkey1234 --secret-value secretvalue1234
+# They won't match...
 ```
 
 ## Why open-source?
