@@ -61,7 +61,34 @@ Open a new terminal,
 # And then verify
 ./yudhisthira --authenticate --secret-key secretkey1234 --secret-value secretvalue1234
 # They won't match...
+
+./yudhisthira --add-peer 
+# Would add the node itself as a peer
+
+./yudhisthira --list-peers
+# Would list the registered peers on that particular node
+
+./yudhisthira --delete-peer
+# Would remove delete the peer
 ```
+
+Each node listens on two ports,
+
+ 1. For authentication and communication needs.
+ 2. Administrative endpoint that ideally won't be accessible from the outside world.
+ 
+The CLI tool allows three primary modes of operation.
+
+  1. For running the application, on a specific port, with a specific host. Command line parameters, `--port <PORT OF THE NODE>` , `--host <HOST NAME OF THE NODE>`
+  2. For secrets the mode paremeter is `--(add|list|delete)-secret(s)` and data parameters are `--admin-port <ADMIN PORT OF THE NODE>`, `--host <HOST NAME OF THE NODE>`, `--secret-key <KEY FOR SECRET>`, `--secret <SECRET VALUE>`
+  3. For secrets the mode paremeter is `--(add|list|delete)-peer(s)` and data parameters are `--admin-port <ADMIN PORT OF THE NODE>`, `--host <HOST NAME OF THE NODE>`, `--peer-host <HOST OF THE PEER TO BE ADDED>`, `--peer-port <PORT OF THE PEER TO BE ADDED>`
+
+For example, a complete command line syntax for adding a secret to a generic node would be,
+
+`./yudhisthira --host <NODE HOST> --admin-port <ADMIN PORT OF THE NODE> --add-secret --secret <SECRET VALUE> --secret-key <SECRET KEY>`
+
+However, adding a peer would be like,
+`./yudhisthira --host <NODE HOST> ----admin-port <ADMIN PORT OF THE NODE> --add-peer --host <SECRET VALUE> --secret-key <SECRET KEY>`
 
 ## Why open-source?
 

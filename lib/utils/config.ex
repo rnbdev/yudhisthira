@@ -6,7 +6,8 @@ defmodule Yudhisthira.Utils.Config do
     ssl_enabled: :https,
     secret: :secret,
     secret_key: :secret_key, # Only for CLI
-    port: :port # Only for CLI
+    port: :port, # Only for CLI
+    admin_port: :admin_port # Only for CLI
   }
 
   def special_mapper(symbol, value) do

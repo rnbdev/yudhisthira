@@ -1,8 +1,10 @@
+
 defmodule Yudhisthira.AuthenticationClient do
   alias Yudhisthira.Utils.Config
   alias Yudhisthira.Utils.Headers
   alias Yudhisthira.Utils.Codec
   alias Yudhisthira.Auth.SmpAuth
+  alias Yudhisthira.Structs.NetworkNode
 
   def create_url(host, port) do
     http_proto = case Config.config(:ssl_enabled) do
@@ -27,6 +29,14 @@ defmodule Yudhisthira.AuthenticationClient do
       [
         headers: Headers.assign_host_headers() |> Headers.assign_secret_key_header(secret_key)
       ]
+    )
+  end
+
+  def authenticate(node, secret) do
+    authenticate(
+      node |> NetworkNode.get_ip_address(),
+      node |> NetworkNode.get_port(),
+      secret
     )
   end
 
