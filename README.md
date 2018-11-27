@@ -83,12 +83,14 @@ The CLI tool allows three primary modes of operation.
   2. For secrets the mode paremeter is `--(add|list|delete)-secret(s)` and data parameters are `--admin-port <ADMIN PORT OF THE NODE>`, `--host <HOST NAME OF THE NODE>`, `--secret-key <KEY FOR SECRET>`, `--secret <SECRET VALUE>`
   3. For secrets the mode paremeter is `--(add|list|delete)-peer(s)` and data parameters are `--admin-port <ADMIN PORT OF THE NODE>`, `--host <HOST NAME OF THE NODE>`, `--peer-host <HOST OF THE PEER TO BE ADDED>`, `--peer-port <PORT OF THE PEER TO BE ADDED>`
 
-For example, a complete command line syntax for adding a secret to a generic node would be,
+ - For example, a complete command line syntax for adding a secret to a generic node would be,
 
 `./yudhisthira --host <NODE HOST> --admin-port <ADMIN PORT OF THE NODE> --add-secret --secret <SECRET VALUE> --secret-key <SECRET KEY>`
 
-However, adding a peer would be like,
+ - However, adding a peer would be like,
 `./yudhisthira --host <NODE HOST> ----admin-port <ADMIN PORT OF THE NODE> --add-peer --host <SECRET VALUE> --secret-key <SECRET KEY>`
+
+The peer connection relies on `:embedded-secret` on the configuration to authenticate itself with it's peers.
 
 ## Why open-source?
 

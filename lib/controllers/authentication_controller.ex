@@ -8,6 +8,7 @@ defmodule Yudhisthira.Controllers.AuthenticationController do
 	alias Yudhisthira.Auth.SmpAuth
 	alias Yudhisthira.Servers.AuthenticationServer
 	alias Yudhisthira.Servers.SecretsRepo
+	alias Yudhisthira.Servers.PeersRepo
 
 	@secret config(:embedded_secret)
 
@@ -32,10 +33,16 @@ defmodule Yudhisthira.Controllers.AuthenticationController do
 		end
 	end
 
-	def sessionize_incoming_connection(conn, node, secret_value) do
+	# TODO: Merge with resolve_secret/1
+	def incoming_peer?(headers) do
+		!(headers |> Headers.get_secret_key())
+	end
+
+	def sessionize_incoming_connection(conn, node, secret_value) do 
+		IO.inspect(incoming_peer?(conn.req_headers))
 		{:ok, new_session_id} = AuthenticationServer.create_new_session(
 			node,
-			%{secret: secret_value}
+			%{secret: secret_value, peer: incoming_peer?(conn.req_headers)}
 		)
 		conn |>
 			put_resp_header(
@@ -73,7 +80,12 @@ defmodule Yudhisthira.Controllers.AuthenticationController do
 										# TODO: Fire a notification and destroy the session!
 										case new_number_map do
 											%{match: x} -> case x do
-												true -> Logger.info("MATCHED")
+												true -> case number_map do
+													%{peer: true} -> 
+														:ok = PeersRepo.add_peer(node)
+														Logger.info("ADDED PEER #{node.ip_address} #{node.port}")
+													_ -> Logger.info("MATCHED")
+												end
 												false -> Logger.info("NOT MATCHED")
 											end
 											_ -> nil
