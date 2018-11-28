@@ -1,6 +1,5 @@
 defmodule Yudhisthira do
   import Yudhisthira.Utils.Config, only: [config: 1]
-  import Yudhisthira.Utils.Ports, only: [find_free_admin_port: 0]
   require Logger
   use Application
 
