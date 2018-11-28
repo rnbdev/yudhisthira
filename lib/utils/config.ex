@@ -32,7 +32,7 @@ defmodule Yudhisthira.Utils.Config do
   end
 
   def find_from_args(arg_name) do
-    {arg_list, _, _} = OptionParser.parse(System.argv())
+    {arg_list, _, _} = OptionParser.parse(System.argv(), switches: [])
     case Enum.find(arg_list, fn {a_name, _} -> 
       arg_name == a_name
     end) do

@@ -7,9 +7,9 @@ defmodule Yudhisthira.Utils.Headers do
 
   # Assignment to a key:value list...
   def assign_host_headers(headers \\ []) do
-    headers ++ [
-      "#{get_header_from_config(:hostname_header)}": System.get_env("HOST_NAME"),
-      "#{get_header_from_config(:hostport_header)}": System.get_env("HOST_PORT")
+    headers ++ [ # TODO: Fix the methods to work as a client...
+      "#{get_header_from_config(:hostname_header)}": Config.config(:host) || "127.0.0.1",
+      "#{get_header_from_config(:hostport_header)}": Config.config(:port) || "1000"
     ]
   end
 

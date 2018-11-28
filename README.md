@@ -82,6 +82,7 @@ The CLI tool allows three primary modes of operation.
   1. For running the application, on a specific port, with a specific host. Command line parameters, `--port <PORT OF THE NODE>` , `--host <HOST NAME OF THE NODE>`
   2. For secrets the mode paremeter is `--(add|list|delete)-secret(s)` and data parameters are `--admin-port <ADMIN PORT OF THE NODE>`, `--host <HOST NAME OF THE NODE>`, `--secret-key <KEY FOR SECRET>`, `--secret <SECRET VALUE>`
   3. For secrets the mode paremeter is `--(add|list|delete)-peer(s)` and data parameters are `--admin-port <ADMIN PORT OF THE NODE>`, `--host <HOST NAME OF THE NODE>`, `--peer-host <HOST OF THE PEER TO BE ADDED>`, `--peer-port <PORT OF THE PEER TO BE ADDED>`
+  4. 
 
 The peer connection relies on `:embedded-secret` on the configuration to authenticate itself with it's peers.
 
