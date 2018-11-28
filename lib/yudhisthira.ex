@@ -9,8 +9,8 @@ defmodule Yudhisthira do
   end
 
   def start(_type, _args) do
-    admin_port = find_free_admin_port()
     http_port = config(:http_port)
+    admin_port = http_port + config(:admin_port_diff)
     Logger.info("Application starting on http://127.0.0.1:#{http_port}")
     Logger.info("Admin application running on http://127.0.0.1:#{admin_port}")
     children = [

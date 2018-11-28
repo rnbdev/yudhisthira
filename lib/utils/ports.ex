@@ -1,6 +1,7 @@
 defmodule Yudhisthira.Utils.Ports do
   import Yudhisthira.Utils.Config, only: [config: 1]
 
+  # TODO: Is it needed anymore?
   def find_free_admin_port do
     Enum.find(config(:admin_port)..(config(:admin_port) + config(:admin_port_range)), fn port_number ->
       case :gen_tcp.listen(port_number, []) do

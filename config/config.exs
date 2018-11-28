@@ -41,6 +41,7 @@ config :yudhisthira, embedded_secret: "Embedded-Secret"
 
 config :yudhisthira, admin_port: 5001
 config :yudhisthira, admin_port_range: 100
+config :yudhisthira, admin_port_diff: 1000
 
 config :yudhisthira, header_prefix: "X-Yudhisthira"
 config :yudhisthira, hostname_header: "Hostname"
