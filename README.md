@@ -15,6 +15,22 @@ Yudhisthira is ideal for enterprise and permissioned networks where trust is a t
 
 From financial institutions, audit firms to Internet of Things (IoT) networks, Yudhisthira can be used out-of-the-box and setup in minutes. A credit scoring institution proving that a particular user is credit worthy without sharing the credit score? Third-party audit firms ensuring the validity of a transaction between two entitites without knowing the transaction details? Two IoT devices proving to each other that they are from the same manufacturer without sharing the manufacturer details? The possibilities are endless.
 
+# Commands
+
+Each node listens on two ports,
+
+ 1. For authentication and communication needs.
+ 2. Administrative endpoint that ideally won't be accessible from the outside world.
+ 
+The CLI tool allows three primary modes of operation.
+
+  1. For running the application, on a specific port, with a specific host. Command line parameters, `--port <PORT OF THE NODE>` , `--host <HOST NAME OF THE NODE>`
+  2. For secrets the mode paremeter is `--(add|list|delete)-secret(s)` and data parameters are `--admin-port <ADMIN PORT OF THE NODE>`, `--host <HOST NAME OF THE NODE>`, `--secret-key <KEY FOR SECRET>`, `--secret <SECRET VALUE>`
+  3. For secrets the mode paremeter is `--(add|list|delete)-peer(s)` and data parameters are `--admin-port <ADMIN PORT OF THE NODE>`, `--host <HOST NAME OF THE NODE>`, `--peer-host <HOST OF THE PEER TO BE ADDED>`, `--peer-port <PORT OF THE PEER TO BE ADDED>`
+  4. For authentication, as of right now, it can only authenticate against key value pairs as a client. In order to do that you would need to do that with `--port <NODE PORT>`, `--host <HOST NAME>`, `--secret-value <SECRET VALUE>`, `--secret-key <SECRET KEY>`.
+
+The peer connection relies on `:embedded-secret` on the configuration to authenticate itself with it's peers.
+
 ## Example usage
 
 As an example, we showcase how two nodes can compare their own secret values. We will install Yudhisthira in one location for convenience, and use two local ports to spawn up two nodes. Each node then can have their own secret which they can match without communicating any part of the secret itself.
@@ -64,30 +80,17 @@ Check if the secrets match (for example, the nodes are from the same manufacture
 ./yudhisthira --authenticate --port 4001 --secret-key manufacturer --secret-value samsung
 ```
 
+In order to let the nodes make aware of each other, you can add them as peers.
 
-./yudhisthira --add-peer 
-# Would add the node itself as a peer
-
-./yudhisthira --list-peers
-# Would list the registered peers on that particular node
-
-./yudhisthira --delete-peer
-# Would remove delete the peer
 ```
+./yudhisthira --add-peer --admin-port 5001 --peer-port 4002
+```
+(This adds the node that is running on 4002, through the admin port of node 4001)
 
-Each node listens on two ports,
+You can also list all peers through the admin port.
 
- 1. For authentication and communication needs.
- 2. Administrative endpoint that ideally won't be accessible from the outside world.
- 
-The CLI tool allows three primary modes of operation.
+`./yudhisthira --list-peers --admin-port 5001`
 
-  1. For running the application, on a specific port, with a specific host. Command line parameters, `--port <PORT OF THE NODE>` , `--host <HOST NAME OF THE NODE>`
-  2. For secrets the mode paremeter is `--(add|list|delete)-secret(s)` and data parameters are `--admin-port <ADMIN PORT OF THE NODE>`, `--host <HOST NAME OF THE NODE>`, `--secret-key <KEY FOR SECRET>`, `--secret <SECRET VALUE>`
-  3. For secrets the mode paremeter is `--(add|list|delete)-peer(s)` and data parameters are `--admin-port <ADMIN PORT OF THE NODE>`, `--host <HOST NAME OF THE NODE>`, `--peer-host <HOST OF THE PEER TO BE ADDED>`, `--peer-port <PORT OF THE PEER TO BE ADDED>`
-  4. For authentication, as of right now, it can only authenticate against key value pairs as a client. In order to do that you would need to do that with `--port <NODE PORT>`, `--host <HOST NAME>`, `--secret-value <SECRET VALUE>`, `--secret-key <SECRET KEY>`.
-
-The peer connection relies on `:embedded-secret` on the configuration to authenticate itself with it's peers.
 
 ## Why open-source?
 
