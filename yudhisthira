@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+if [[ "$1" == "install" ]]
+then
+    mix deps.get
+    mix compile
+elif [[ "$1" == "run" ]]
+then
+    shift
+    MIX_ENV=dev mix run --no-start --no-halt -e "Yudhisthira.CLI.run()" -- $@
+else
+    MIX_ENV=dev mix run --no-start -e "Yudhisthira.CLI.start()" -- $@
+fi

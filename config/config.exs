@@ -28,3 +28,32 @@ use Mix.Config
 # here (which is why it is important to import them last).
 #
 #     import_config "#{Mix.env}.exs"
+
+config :yudhisthira, authentication_endpoint: "/authenticate"
+config :yudhisthira, admin_endpoint: "/admin"
+config :yudhisthira, secrets_endpoint: "/secrets"
+config :yudhisthira, peers_endpoint: "/peers"
+config :yudhisthira, smp_mod: 2410312426921032588552076022197566074856950548502459942654116941958108831682612228890093858261341614673227141477904012196503648957050582631942730706805009223062734745341073406696246014589361659774041027169249453200378729434170325843778659198143763193776859869524088940195577346119843545301547043747207749969763750084308926339295559968882457872412993810129130294592999947926365264059284647209730384947211681434464714438488520940127459844288859336526896320919633919
+config :yudhisthira, authentication_interval: 10_000
+config :yudhisthira, session_lifespan: 20_000
+config :yudhisthira, admin_port: 3000
+config :yudhisthira, embedded_secret: "Embedded-Secret"
+
+config :yudhisthira, admin_port: 5001
+config :yudhisthira, admin_port_range: 100
+config :yudhisthira, admin_port_diff: 1000
+
+config :yudhisthira, header_prefix: "X-Yudhisthira"
+config :yudhisthira, hostname_header: "Hostname"
+config :yudhisthira, hostport_header: "Host-Port"
+config :yudhisthira, hostid_header: "Id"
+config :yudhisthira, session_header: "Session-Id"
+config :yudhisthira, auth_data_header: "Auth-Data"
+config :yudhisthira, secret_key_header: "Secret-Key"
+config :yudhisthira, auth_header: "Authy"
+
+# Overridable from cmd line
+config :yudhisthira, http_port: 4001
+config :yudhisthira, host_port: 4001
+config :yudhisthira, http_host: "127.0.0.1"
+config :yudhisthira, ssl_enabled: false

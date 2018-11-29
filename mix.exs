@@ -5,7 +5,7 @@ defmodule Yudhisthira.MixProject do
     [
       app: :yudhisthira,
       version: "0.1.0",
-      elixir: "~> 1.6",
+      elixir: "~> 1.7",
       start_permanent: Mix.env() == :prod,
       deps: deps()
     ]
@@ -15,15 +15,17 @@ defmodule Yudhisthira.MixProject do
   def application do
     [
       mod: {Yudhisthira, []},
-      extra_applications: [:logger]
+      extra_applications: [:logger, :httpotion]
     ]
   end
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      # {:dep_from_hexpm, "~> 0.3.0"},
-      # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"},
+      {:httpotion, "~> 3.1.0"},
+      {:plug_cowboy, "~> 2.0"},
+      {:poison, "~> 4.0.1"},
+      {:uuid, "~> 1.1"}
     ]
   end
 end
