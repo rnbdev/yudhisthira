@@ -1,7 +1,9 @@
 # Yudhisthira
 Privacy-first communication protocol for decentralized networks providing interoperability in multi-vendor platforms.
 
-[https://yudhisthira.io](https://yudhisthira.io)
+Yudhisthira provides a communication mechanism for a scalable, decentralized mesh of low footprint, fault tolerant nodes. The privacy-first communication system is suitable for a wide variety of intra-VPC applications running on multi-vendor platforms. It is built on industry standard Erlang runtime for resilience.
+
+See more details at [https://yudhisthira.io](https://yudhisthira.io).
 
 ## Etymology
 
@@ -9,58 +11,59 @@ Yudhisthira is the eptiome of righteousness in the legendary epic Mahabharata. I
 
 ## Use cases
 
-Yudhisthira provides a scalable, decentralized mesh of low footprint, fault tolerant nodes with in-memory-only datastore. The privacy-first communication system is suitable for a wide variety of intra-VPC applications running on multi-vendor platforms. It is built on industry standard Erlang runtime for resilience.
-
 Yudhisthira is ideal for enterprise and permissioned networks where trust is a two-way street. It enables a number of multiparty computation (MPC) and zero-knowledge proof (ZKP) based communication templates for providing proof of knowledge without sharing sensitive data.
 
-From financial institutions, audit firms to Internet of Things (IoT) networks, Yudhisthira can be used out-of-the-box and setup in minutes for a variety of domains. A credit scoring institution proving that a particular user is credit worthy without sharing the credit score? Third-party audit firms ensuring the validity of a transaction between two entitites without knowing the transaction details? Two IoT devices proving to each other that they are from the same manufacturer without sharing the manufacturer details? The possibilities are endless.
+From financial institutions, audit firms to Internet of Things (IoT) networks, Yudhisthira can be used out-of-the-box and setup in minutes. A credit scoring institution proving that a particular user is credit worthy without sharing the credit score? Third-party audit firms ensuring the validity of a transaction between two entitites without knowing the transaction details? Two IoT devices proving to each other that they are from the same manufacturer without sharing the manufacturer details? The possibilities are endless.
 
-## Usage
+## Example usage
 
-Before you start, you would need to install Elixir (> 1.6).
+As an example, we showcase how two nodes can compare their own secret values. We will install Yudhisthira in one location for convenience, and use two local ports to spawn up two nodes. Each node then can have their own secret which they can match without communicating any part of the secret itself.
 
-NOTE: These scripts are for development use only...
+Before you start, install Elixir (> 1.6).
 
-```bash
+In Mac, for example, `brew install elixir` should work with homebrew for latest MacOS.
+
+**Caution: This is strictly shown as an example, and not to be used in production. For questions, contact yudhisthira@getonchain.com.**
+
+Install Yudhisthira.
+```
 git clone https://github.com/getonchain/yudhisthira
 cd yudhisthira
-
 ./yudhisthira install
-# You can add a --port <PORT> to override the deafult port of 4001
-./yudhisthira run # Warning: This opens a HTTP /admin endpoint in dev mode for modifying & adding secrets
 ```
 
-Open a new terminal,
-```bash
-# Navigate to the previous directory on a new terminal
+Open a node in port 4001, with admin port 5001
+(Warning: This opens a HTTP /admin endpoint in dev mode. This is not suitable for production.)
 
-# If your node is running on some other port other than the default 4001, add the --port CLI arg.
+```
+yudhisthira run --port 4001
+```
 
-# Let's add a secret key value pair
-./yudhisthira --addsecret --secret-value secretvalue1234 --secret-key secretkey1234
-# Should prompt a secret added sign
+Add a secret as a (key,value) pair. It can be any secret to the node, for example, for an IoT device, it can be the name of the manufacturer.
 
-# Now let's check if the verification works
-./yudhisthira --authenticate --secret-value secretvalue1234 --secret-key secretkey1234
-# Should prompt a secret matched sign
-# This spins up a server-less version of a Yudhisthira instance and verifies the keys with Socialist Millionaire Protocol
+```
+./yudhisthira --add-secret --admin-port 5001 --secret-key manufacturer --secret-value samsung
+```
 
-# Now let's see all the secret key-value pairs we have on our node
-./yudhisthira --list-secrets
+Open a new terminal to run another node.
 
-# Now let's delete a key
-./yudhisthira --delete-secret --secret-key secretkey1234
+```
+cd yudhisthira
+./yudhisthira run --port 4002
+```
 
-# Now let's see of the secrets match or not
-./yudhisthira --authenticate --secret-key secretkey1234 --secret-value secretvalue1234
-# Should prompt that secrets didn't match
+Add the secret to the new node.
 
-# You can also update a secret
-./yudhisthira --update-key --secret-key secretkey1234 --secret-value newsecretvalue4321
+```
+./yudhisthira --add-secret --admin-port 5002 --secret-key manufacturer --secret-value samsung
+```
 
-# And then verify
-./yudhisthira --authenticate --secret-key secretkey1234 --secret-value secretvalue1234
-# They won't match...
+Check if the secrets match (for example, the nodes are from the same manufacturer). In this case, we are providing the secret with the command-line argument, but that will not be required in future updates.
+
+```
+./yudhisthira --authenticate --port 4001 --secret-key manufacturer --secret-value samsung
+```
+
 
 ./yudhisthira --add-peer 
 # Would add the node itself as a peer
