@@ -16,6 +16,7 @@ defmodule Yudhisthira.Auth.SmpAuth do
       )
     )
     d = rem(rand_exponent - mulm(x, c, @mod_order), @mod_order)
+    d = rem(d + @mod_order, @mod_order)
     {c, d}
   end
 
@@ -44,7 +45,9 @@ defmodule Yudhisthira.Auth.SmpAuth do
     )
 
     d1 = (r1 - mulm(r, c, @mod_order)) |> rem(@mod_order)
+    d1 = rem(d1 + @mod_order, @mod_order)
     d2 = (r2 - mulm(secret, c, @mod_order)) |> rem(@mod_order)
+    d2 = rem(d2 + @mod_order, @mod_order)
 
     {c, d1, d2}
   end
@@ -81,6 +84,7 @@ defmodule Yudhisthira.Auth.SmpAuth do
     )
     tmp1 = mulm(x, c, @mod_order)
     d = rem(r - tmp1, @mod_order)
+    d = rem(d + @mod_order, @mod_order)
 
     {c, d}
   end
